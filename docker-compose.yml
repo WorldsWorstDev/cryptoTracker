@@ -1,0 +1,37 @@
+version: "3"
+services:
+  grafana:
+    image: grafana/grafana
+    container_name: grafana_container
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    networks:
+      - btc_network
+    volumes:
+      - grafana-volume:/var/lib/grafana
+  influxdb:
+    image: influxdb
+    container_name: influxdb_container
+    restart: unless-stopped
+    ports:
+      - 8086:8086
+    networks:
+      - btc_network
+    volumes:
+      - influxdb-volume:/var/lib/influxdb
+  cryptotracker:
+    build: .
+    container_name: crypto_container
+    ports:
+      - 8080:80
+    restart: unless-stopped
+    networks:
+      - btc_network
+networks:
+  btc_network:
+volumes:
+  grafana-volume:
+    external: true
+  influxdb-volume:
+    external: true
